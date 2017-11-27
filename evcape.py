@@ -34,6 +34,10 @@ def main():
         for s in DEFAULT_RULES
     ]
     assert len(rules) > 0
+    rules_by_last_event = {}
+    for rule in rules:
+        key = rule.patterns[-1]
+        rules_by_last_event.setdefault(key, []).append(rule)
 
     uinput = evdev.UInput(name='evcape', phys='evcape')
     logger.info("created uinput device {0.device.fn}".format(uinput))
@@ -47,16 +51,20 @@ def main():
 
     with uinput, keyboard_monitor:
         for event in keyboard_monitor:
-            buffer.append(event)
-            for rule in rules:
-                buffer_part_to_match = list(buffer)[-len(rule.patterns):]
-                if rule.patterns != buffer_part_to_match:
+            lookup_key = (event.value, event.code)
+            buffer.append(lookup_key)
+            possibly_matching_rules = rules_by_last_event.get(lookup_key)
+            if not possibly_matching_rules:
+                continue
+            for rule in possibly_matching_rules:
+                buffer_slice = list(buffer)[-len(rule.patterns):]
+                if rule.patterns != buffer_slice:
                     continue
-                for action, code in rule.actions:
+                for value, code in rule.actions:
                     uinput.write(
                         evdev.ecodes.EV_KEY,
                         code,
-                        ACTION_TO_KEY_EVENT_VALUE[action])
+                        value)
                 uinput.syn()
 
 
@@ -124,12 +132,9 @@ class KeyboardMonitor:
                 for event in read_input_device_events(input_device):
                     if event.type != evdev.ecodes.EV_KEY:
                         continue
-                    try:
-                        action = KEY_EVENT_VALUE_TO_ACTION[event.value]
-                    except KeyError:
-                        pass  # e.g. key repeat
-                    else:
-                        yield action, event.code
+                    if event.value not in KEY_EVENT_VALUE_TO_ACTION:
+                        continue  # e.g. key repeat
+                    yield event
             elif selector_key.data == 'udev':  # hotplug event
                 poll_monitor = functools.partial(
                     selector_key.fileobj.poll,
@@ -193,9 +198,9 @@ class Rule(_Rule):
         out = []
         for chunk in s.split(','):
             action, _, key = chunk.partition(':')
-            assert action in KEY_EVENT_VALUE_TO_ACTION.values()
+            value = ACTION_TO_KEY_EVENT_VALUE[action]
             code = getattr(evdev.ecodes, 'KEY_{}'.format(key.upper()))
-            out.append((action, code))
+            out.append((value, code))
         return out
 
 
