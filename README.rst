@@ -13,6 +13,19 @@ take corresponding actions.
 it uses ``evdev``, ``udev`` and ``uinput`` and hence works with wayland and
 on the console.
 
+Usage
+==============
+
+.. code:: sh
+
+  sudo ./evcape.py
+
+Dependencies
+==============
+
+``evcape`` uses python's evdev and udev libaries.
+On debian, ``apt install python3-evdev python3-pyudev``
+
 current status
 ==============
 
