@@ -50,3 +50,7 @@ similar projects
 
 ``evcape`` is inspired by ``xcape`` (https://github.com/alols/xcape),
 but is not limited to xorg.
+
+
+``caps2esc`` (https://gitlab.com/interception/linux/plugins/caps2esc) and ``interception tools`` (https://gitlab.com/interception/linux/tools)
+
