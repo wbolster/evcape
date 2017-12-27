@@ -45,10 +45,12 @@ def main():
     keyboard_monitor = KeyboardMonitor(
         ignored_devices=[uinput.device.fn])
 
+    # our buffer is as long as the longest sequence in rules
     window_size = max(
         [len(rule.patterns) for rule in rules])
     buffer = collections.deque(maxlen=window_size)
 
+    # put keypresses into a buffer and try to match rules
     with uinput, keyboard_monitor:
         for event in keyboard_monitor:
             lookup_key = (event.value, event.code)
@@ -188,6 +190,15 @@ class Rule(_Rule):
 
     @classmethod
     def from_string(cls, s):
+        """
+        create numeric rules from text
+          s='press:leftctrl,release:leftctrl=press:esc,release:esc',
+         becomes
+          Rule(patterns=[(1, 29), (0, 29)], actions=[(1, 1), (0, 1)])
+        where
+          KEY_LEFTCTRL = 29 ; KEY_ESC = 1
+          release = 0; press = 1
+        """
         patterns, _, actions = s.partition('=')
         return cls(
             patterns=cls.parse_sequence(patterns),

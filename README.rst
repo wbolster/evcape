@@ -13,6 +13,21 @@ take corresponding actions.
 it uses ``evdev``, ``udev`` and ``uinput`` and hence works with wayland and
 on the console.
 
+Usage
+==============
+
+.. code:: sh
+
+  # if remaping capslock as in DEFAULT_RULES
+  setxkbmap -option "caps:ctrl_modifier" 
+  sudo ./evcape.py
+
+Dependencies
+==============
+
+``evcape`` uses python's evdev and udev libaries.
+On debian, ``apt install python3-evdev python3-pyudev``
+
 current status
 ==============
 
@@ -37,3 +52,8 @@ similar projects
 
 ``evcape`` is inspired by ``xcape`` (https://github.com/alols/xcape),
 but is not limited to xorg.
+
+
+``caps2esc`` (https://gitlab.com/interception/linux/plugins/caps2esc) and ``interception tools`` (https://gitlab.com/interception/linux/tools)
+
+``setxkbmap -option "caps:swapescape"``
