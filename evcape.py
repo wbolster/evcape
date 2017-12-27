@@ -67,17 +67,6 @@ def main():
                         evdev.ecodes.EV_KEY,
                         code,
                         value)
-
-                # if we matched capslock, we should toggle it again
-                # force symmetry in push/releases of capslock in pattern
-                for value, key in rule.patterns:
-                    if key != evdev.ecodes.KEY_CAPSLOCK:
-                        continue
-                    uinput.write(
-                            evdev.ecodes.EV_KEY,
-                            evdev.ecodes.KEY_CAPSLOCK,
-                            value)
-
                 uinput.syn()
 
 
