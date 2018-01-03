@@ -2,10 +2,10 @@
 evcape
 ======
 
-``evcape`` makes your <kdb>caps lock</kdb> key work as both
-<kbd>ctrl</kdb> and an <kbd>esc</kbd> key, depending on whether you
-combine it with another key (acts as <kbd>ctrl</kbd>) or release it
-immediately (acts as <kbd>esc</kbd>). this is ideal for vim bindings.
+``evcape`` makes your ``caps lock`` key work as both ``ctrl`` and
+an ``esc`` key, depending on whether you combine it with another key
+(acts as ``ctrl``) or release it immediately (acts as ``esc``). this
+is ideal for vim bindings.
 
 in general, ``evcape`` simulates an additional key press (e.g. escape
 or backspace) when a modifier key (e.g. shift or control) is pressed
