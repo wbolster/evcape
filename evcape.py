@@ -39,7 +39,7 @@ def main():
         key = rule.patterns[-1]
         rules_by_last_event.setdefault(key, []).append(rule)
 
-    uinput = evdev.UInput(name='evcape', phys='evcape')
+    uinput = evdev.UInput(name='evcape')
     logger.info("created uinput device {0.device.fn}".format(uinput))
 
     keyboard_monitor = KeyboardMonitor(
