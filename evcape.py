@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import argparse
 import collections
 import errno
 import functools
@@ -27,11 +28,16 @@ ACTION_TO_KEY_EVENT_VALUE = {
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        'rules', nargs='*', metavar='rule', default=DEFAULT_RULES)
+    args = parser.parse_args()
+
     logging.basicConfig(level=logging.INFO)
 
     rules = [
         Rule.from_string(s)
-        for s in DEFAULT_RULES
+        for s in args.rules
     ]
     assert len(rules) > 0
     rules_by_last_event = {}

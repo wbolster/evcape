@@ -21,7 +21,6 @@ current status
 - keyboard input event detection works
 - keyboard simulation works
 - monitoring of hotplug events (external keyboards) works
-- rules are built-in and can only be changed by editing the source code
 
 who wrote this?
 ===============
