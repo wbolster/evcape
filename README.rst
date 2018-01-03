@@ -74,8 +74,14 @@ or, if you use a virtualenv::
 
 pass ``--help`` for usage options.
 
+custom rules
+------------
+
 by default, the built-in rules make caps/control act as escape.
 alternatively, specify your own rules on the command line.
+
+start at login
+--------------
 
 to start upon login, one option is to use a systemd user service,
 e.g. ``~/.config/systemd/user/evcape.service``.
@@ -94,6 +100,49 @@ here is an example with some custom rules::
 
   [Install]
   WantedBy=default.target
+
+running as a normal user
+------------------------
+
+(note: this is based on an ubuntu system.)
+
+``evcape`` operates on a fairly low level of the input stack: it needs
+to access to raw input devices to read events and also needs to inject
+keyboard events. this means ``evcape`` is both a ‘key logger’ (without
+logging anything!) and a fake keyboard.
+
+things like that can typically only be don by the ``root`` user, but
+this can be avoided by elevating your user's privileges to access
+input devices. this improves the situation somewhat, but keep in mind
+that ``evcape`` still has complete control over the input stack.
+
+typically, input devices are owned by the group ``input``::
+
+  $ ls -al /dev/input/event0
+  crw-rw---- 1 root input 13, 64 jan  3 13:26 /dev/input/event0
+
+adding yourself to that group will enable you to use those devices::
+
+  $ sudo adduser $(whoami) input
+
+to simulate key presses, ``/dev/uinput`` is used, which is owned
+by root directly. this can be changed to use a newly created
+``uinput`` group::
+
+  $ sudo addgroup --system uinput
+  $ sudo adduser $(whoami) uinput
+
+add a udev rule to make ``/dev/uinput`` use this group by
+creating a new file, ``/etc/udev/rules.d/99-uinput.rules``,
+with these contents::
+
+  KERNEL=="uinput", GROUP="uinput", MODE:="0660"
+
+now reboot to make all changes take effect. afterwards, it should look
+like this::
+
+  $ ls -al /dev/uinput
+  crw-rw---- 1 root uinput 10, 223 jan  3 13:26 /dev/uinput
 
 who wrote this?
 ===============
