@@ -101,7 +101,15 @@ class KeyboardMonitor:
     def add_keyboard(self, device_name):
         if device_name in self.ignored_devices:
             return
-        input_device = evdev.InputDevice(device_name)
+        try:
+            input_device = evdev.InputDevice(device_name)
+        except OSError as exc:
+            if exc.errno != errno.ENOTTY:
+                raise
+            logger.warning(
+                "could not create input device for {}"
+                .format(device_name))
+            return
         self.selector.register(
             input_device, events=selectors.EVENT_READ, data='keyboard')
         logger.info(
