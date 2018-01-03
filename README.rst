@@ -53,11 +53,11 @@ alternatively, use a `virtualenv` for isolation::
 usage
 =====
 
-use your desktop environment (gnome has a ui for it in gnome-tweak-tool)
-to make caps lock an extra control so that it becomes harmless.
+make caps lock an extra control. gnome has a ui for it:
+gnome-tweak-tool, keyboard, extra options, ‘caps lock is control’.
 alternatively, use something like this::
 
-  setxkbmap -option "caps:ctrl_modifier"
+  setxkbmap -option "ctrl:nocaps"
 
 then run evcape::
 
