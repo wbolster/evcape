@@ -2,18 +2,24 @@
 evcape
 ======
 
-``evcape`` makes modifier keys (shift, control) more useful
-by simulating another key press (for instance escape or backspace)
-when they are pressed and immediately released.
+``evcape`` makes your <kdb>caps lock</kdb> key work as both
+<kbd>ctrl</kdb> and an <kbd>esc</kbd> key, depending on whether you
+combine it with another key (acts as <kbd>ctrl</kbd>) or release it
+immediately (acts as <kbd>esc</kbd>). this is ideal for vim bindings.
 
-this tools is a small daemon that listens to keyboard events using the
+in general, ``evcape`` simulates an additional key press (e.g. escape
+or backspace) when a modifier key (e.g. shift or control) is pressed
+and immediately released.
+
+``evcape`` is a small daemon that listens to keyboard events using the
 linux input subsystem, and uses simple rules to detects patterns and
 take corresponding actions.
 
-it uses ``evdev``, ``udev`` and ``uinput`` and hence works with wayland and
-on the console.
+it uses ``evdev``, ``udev`` and ``uinput`` and hence works with
+wayland and on the console, unlike ``evcape``'s inspiration,
+``xcape``.
 
-current status
+crrent status
 ==============
 
 *WARNING*: this is alpha quality software, use at your own risk!
@@ -34,7 +40,11 @@ make sure you have the python (3) libraries installed for:
 - pyudev
 - six
 
-use your system packages, or use a `virtualenv` for isolation::
+on debian/ubuntu this would be::
+
+  apt install python3-evdev python3-pyudev python3-six
+
+alternatively, use a `virtualenv` for isolation::
 
   virtualenv --python=python3 venv
   source venv/bin/activate
@@ -52,6 +62,10 @@ alternatively, use something like this::
 then run evcape::
 
   ./evcape.py
+
+you may need to run with root permissions to access raw input devices::
+
+  sudo ./evcape.py
 
 or, if you use a virtualenv::
 
@@ -93,5 +107,10 @@ https://twitter.com/wbolster on twitter. follow me. or say hi.
 similar projects
 ================
 
-``evcape`` is inspired by ``xcape`` (https://github.com/alols/xcape),
-but is not limited to xorg.
+* ``evcape`` is inspired by ``xcape`` (https://github.com/alols/xcape),s
+  but is not limited to xorg.
+
+* ``caps2esc`` (https://gitlab.com/interception/linux/plugins/caps2esc)s
+  is a c implementation of ``xcape`` without the X dependency.
+  it is part of a project called ‘interception tools’
+  (https://gitlab.com/interception/linux/tools).
