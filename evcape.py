@@ -16,6 +16,7 @@ DEFAULT_RULES = [
     'press:leftctrl,release:leftctrl=press:esc,release:esc',
     'press:capslock,release:capslock=press:esc,release:esc',
 ]
+DEFAULT_TIMEOUT = 1000
 
 KEY_EVENT_VALUE_TO_ACTION = {
     0: 'release',
@@ -31,9 +32,14 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
         'rules', nargs='*', metavar='rule', default=DEFAULT_RULES)
+    parser.add_argument(
+        '--timeout', type=int, default=DEFAULT_TIMEOUT)
     args = parser.parse_args()
 
     logging.basicConfig(level=logging.INFO)
+
+    timeout = args.timeout / 1000
+    logger.info("using timeout {}ms".format(args.timeout))
 
     for s in args.rules:
         logger.info("adding rule {!r}".format(s))
@@ -59,10 +65,15 @@ def main():
     buffer = collections.deque(maxlen=window_size)
 
     # put keypresses into a buffer and try to match rules
+    previous_event_timestamp = 0.0
     with uinput, keyboard_monitor:
         for event in keyboard_monitor:
             lookup_key = (event.value, event.code)
             buffer.append(lookup_key)
+            ts_diff = event.timestamp() - previous_event_timestamp
+            previous_event_timestamp = event.timestamp()
+            if ts_diff >= timeout:
+                continue
             possibly_matching_rules = rules_by_last_event.get(lookup_key)
             if not possibly_matching_rules:
                 continue
