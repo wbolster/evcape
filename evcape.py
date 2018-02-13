@@ -35,6 +35,8 @@ def main():
 
     logging.basicConfig(level=logging.INFO)
 
+    for s in args.rules:
+        logger.info("adding rule {!r}".format(s))
     rules = [
         Rule.from_string(s)
         for s in args.rules
