@@ -138,6 +138,12 @@ with these contents::
 
   KERNEL=="uinput", GROUP="uinput", MODE:="0660"
 
+it may be necessary to explicitly load the ``uinput`` kernel module for
+the rule to apply correctly. this can be done by creating a new file,
+``/etc/modules.load.d/uinput.conf`` with these contents::
+
+  uinput
+
 now reboot to make all changes take effect. afterwards, it should look
 like this::
 
