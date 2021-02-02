@@ -54,10 +54,10 @@ def main():
         rules_by_last_event.setdefault(key, []).append(rule)
 
     uinput = evdev.UInput(name='evcape')
-    logger.info("created uinput device {0.device.fn}".format(uinput))
+    logger.info("created uinput device {0.device.path}".format(uinput))
 
     keyboard_monitor = KeyboardMonitor(
-        ignored_devices=[uinput.device.fn])
+        ignored_devices=[uinput.device.path])
 
     # the buffer is as long as the longest sequence in rules
     window_size = max(
@@ -134,7 +134,7 @@ class KeyboardMonitor:
         self.selector.register(
             input_device, events=selectors.EVENT_READ, data='keyboard')
         logger.info(
-            "monitoring {0.fn} ({0.name})"
+            "monitoring {0.path} ({0.name})"
             .format(input_device))
 
     def remove_keyboard(self, device_name):
@@ -142,11 +142,11 @@ class KeyboardMonitor:
             input_device = selector_key.fileobj
             if not isinstance(input_device, evdev.InputDevice):
                 continue
-            if input_device.fn != device_name:
+            if input_device.path != device_name:
                 continue
             self.selector.unregister(input_device)
             logger.info(
-                "no longer monitoring {0.fn} ({0.name})"
+                "no longer monitoring {0.path} ({0.name})"
                 .format(input_device))
             break
 
