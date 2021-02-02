@@ -78,7 +78,8 @@ def main():
             if not possibly_matching_rules:
                 continue
             for rule in possibly_matching_rules:
-                buffer_slice = list(buffer)[-len(rule.patterns):]
+                offset = -len(rule.patterns)
+                buffer_slice = list(buffer)[offset:]
                 if rule.patterns != buffer_slice:
                     continue
                 for value, code in rule.actions:
