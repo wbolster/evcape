@@ -47,7 +47,14 @@ def main():
         key = rule.patterns[-1]
         rules_by_last_event.setdefault(key, []).append(rule)
 
-    uinput = evdev.UInput(name="evcape")
+    # tell the uinput device about the exact keys used in rule actions since
+    # the default value causes events not to propagate to the session somehow;
+    # see also https://gitlab.gnome.org/GNOME/mutter/-/issues/1869
+    keys = sorted({code for rule in rules for _, code in rule.actions})
+    uinput = evdev.UInput(
+        events={evdev.ecodes.EV_KEY: keys},
+        name="evcape",
+    )
     logger.info(f"created uinput device {uinput.device.path}")
 
     keyboard_monitor = KeyboardMonitor(ignored_devices=[uinput.device.path])
