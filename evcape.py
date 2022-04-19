@@ -36,10 +36,10 @@ def main():
     logging.basicConfig(level=logging.INFO)
 
     timeout = args.timeout / 1000
-    logger.info("using timeout {}ms".format(args.timeout))
+    logger.info(f"using timeout {args.timeout}ms")
 
     for s in args.rules:
-        logger.info("adding rule {!r}".format(s))
+        logger.info(f"adding rule {s!r}")
     rules = [Rule.from_string(s) for s in args.rules]
     assert len(rules) > 0
     rules_by_last_event = {}
@@ -48,7 +48,7 @@ def main():
         rules_by_last_event.setdefault(key, []).append(rule)
 
     uinput = evdev.UInput(name="evcape")
-    logger.info("created uinput device {0.device.path}".format(uinput))
+    logger.info(f"created uinput device {uinput.device.path}")
 
     keyboard_monitor = KeyboardMonitor(ignored_devices=[uinput.device.path])
 
@@ -116,7 +116,7 @@ class KeyboardMonitor:
         except OSError as exc:
             if exc.errno != errno.ENOTTY:
                 raise
-            logger.warning("could not create input device for {}".format(device_name))
+            logger.warning(f"could not create input device for {device_name}")
             return
         self.selector.register(
             input_device, events=selectors.EVENT_READ, data="keyboard"
@@ -233,7 +233,7 @@ class Rule(_Rule):
         for chunk in s.split(","):
             action, _, key = chunk.partition(":")
             value = ACTION_TO_KEY_EVENT_VALUE[action]
-            code = getattr(evdev.ecodes, "KEY_{}".format(key.upper()))
+            code = getattr(evdev.ecodes, f"KEY_{key.upper()}")
             out.append((value, code))
         return out
 
