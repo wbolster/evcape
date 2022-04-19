@@ -19,7 +19,7 @@ it uses ``evdev``, ``udev`` and ``uinput`` and hence works with
 wayland and on the console, unlike ``evcape``'s inspiration,
 ``xcape``.
 
-crrent status
+current status
 ==============
 
 *WARNING*: this is alpha quality software, use at your own risk!
@@ -162,10 +162,10 @@ https://twitter.com/wbolster on twitter. follow me. or say hi.
 similar projects
 ================
 
-* ``evcape`` is inspired by ``xcape`` (https://github.com/alols/xcape),s
+* ``evcape`` is inspired by ``xcape`` (https://github.com/alols/xcape)
   but is not limited to xorg.
 
-* ``caps2esc`` (https://gitlab.com/interception/linux/plugins/caps2esc)s
+* ``caps2esc`` (https://gitlab.com/interception/linux/plugins/caps2esc)
   is a c implementation of ``xcape`` without the X dependency.
   it is part of a project called ‘interception tools’
   (https://gitlab.com/interception/linux/tools).
