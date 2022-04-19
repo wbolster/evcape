@@ -53,7 +53,7 @@ def main():
     keyboard_monitor = KeyboardMonitor(ignored_devices=[uinput.device.path])
 
     # the buffer is as long as the longest sequence in rules
-    window_size = max([len(rule.patterns) for rule in rules])
+    window_size = max(len(rule.patterns) for rule in rules)
     buffer = collections.deque(maxlen=window_size)
 
     # put keypresses into a buffer and try to match rules
