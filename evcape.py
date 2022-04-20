@@ -125,9 +125,7 @@ class KeyboardMonitor:
         try:
             input_device = evdev.InputDevice(device_name)
         except OSError as exc:
-            if exc.errno != errno.ENOTTY:
-                raise
-            logger.warning(f"could not create input device for {device_name}")
+            logger.warning(f"could not create input device for {device_name}: {exc}")
             return
         self.selector.register(
             input_device, events=selectors.EVENT_READ, data="keyboard"
