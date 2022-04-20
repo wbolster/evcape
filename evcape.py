@@ -55,6 +55,10 @@ def main():
         events={evdev.ecodes.EV_KEY: keys},
         name="evcape",
     )
+    if uinput.device is None:
+        raise RuntimeError(
+            f"could not access evdev device for uinput device {uinput.name!r}"
+        )
     logger.info(f"created uinput device {uinput.device.path}")
 
     keyboard_monitor = KeyboardMonitor(ignored_devices=[uinput.device.path])
